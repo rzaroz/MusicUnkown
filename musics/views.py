@@ -52,8 +52,7 @@ def add_new(request):
                 music=music
             )
         except Exception as e:
-            print(e)
-            messages.error(request, str(e))
+            messages.error(request, "خطا در آپلود فایل رخ داد.")
             return render(request, "new.html", context)
 
         return HttpResponseRedirect(reverse("detail", kwargs={"pk": new_music.pk}))
