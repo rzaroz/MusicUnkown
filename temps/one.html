@@ -1,0 +1,166 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="fa">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<link rel="shortcut icon" href="{% static 'musicunkno.png' %}" type="image/x-icon">
+<title>{{ music.music_name }}</title>
+
+<style>
+
+*{
+margin:0;
+padding:0;
+box-sizing:border-box;
+font-family:-apple-system,BlinkMacSystemFont,"SF Pro Display",sans-serif
+}
+
+body{
+background:#000;
+color:#fff;
+min-height:100vh;
+padding:40px 20px
+}
+
+.header{
+width:100%;
+max-width:900px;
+margin:auto;
+display:flex;
+align-items:center;
+justify-content:space-between;
+margin-bottom:60px
+}
+
+.back-link{
+text-decoration:none;
+color:black;
+font-size:14px;
+font-weight:500;
+background:white;
+padding:10px 16px;
+border-radius:10px;
+transition:.2s
+}
+
+.back-link:hover{
+transform:translateY(-2px)
+}
+
+.logo{
+width:42px;
+height:42px;
+border-radius:12px;
+object-fit:cover
+}
+
+.container{
+max-width:600px;
+margin:auto
+}
+
+.music-card{
+background:#111;
+padding:26px;
+border-radius:20px;
+margin-bottom:20px;
+box-shadow:0 10px 30px rgba(0,0,0,.6);
+transition:.25s
+}
+
+.music-card:hover{
+transform:translateY(-3px)
+}
+
+.uploader{
+font-size:13px;
+color:#888;
+margin-bottom:6px
+}
+
+.song-name{
+font-size:22px;
+font-weight:600;
+margin-bottom:16px
+}
+
+.share-row{
+display:flex;
+justify-content:flex-end;
+margin-bottom:12px
+}
+
+.share-btn{
+background:rgba(255,255,255,.35);
+color:black;
+border:none;
+padding:8px 14px;
+border-radius:14px;
+font-size:11px;
+cursor:pointer;
+transition:.2s
+}
+
+.share-btn:hover{
+background:white
+}
+
+.audio-player{
+width:100%;
+height:40px;
+background:#1c1c1e;
+border-radius:12px;
+outline:none
+}
+
+audio::-webkit-media-controls-panel{
+background:#1c1c1e
+}
+
+</style>
+</head>
+
+<body>
+
+<div class="header">
+
+<a href="/" class="back-link">بازگشت</a>
+
+<img src="{% static 'musicunkno.png' %}" class="logo">
+
+</div>
+
+
+<div class="container">
+
+<div class="music-card">
+
+<div class="uploader">{{ music.username }}</div>
+
+<div class="song-name">{{ music.music_name }}</div>
+
+<div class="share-row">
+<button class="share-btn" onclick="copyLink()">share 👾</button>
+</div>
+
+<audio class="audio-player" controls src="{{ music.music.url }}"></audio>
+
+</div>
+
+</div>
+
+
+<script>
+
+function copyLink(){
+navigator.clipboard.writeText(window.location.href)
+const btn=document.querySelector('.share-btn')
+btn.innerText='copied ✓'
+setTimeout(()=>btn.innerText='share 👾',1500)
+}
+
+</script>
+
+</body>
+</html>

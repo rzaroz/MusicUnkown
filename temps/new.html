@@ -1,0 +1,202 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="fa">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<link rel="shortcut icon" href="{% static 'musicunkno.png' %}" type="image/x-icon">
+<title>Add Music</title>
+
+<style>
+
+*{
+margin:0;
+padding:0;
+box-sizing:border-box;
+font-family:-apple-system,BlinkMacSystemFont,"SF Pro Display",sans-serif
+}
+
+body{
+background:#000;
+color:#fff;
+min-height:100vh;
+padding:40px 20px
+}
+
+.header{
+width:100%;
+max-width:900px;
+margin:auto;
+display:flex;
+align-items:center;
+justify-content:space-between;
+margin-bottom:60px
+}
+
+.back-link{
+text-decoration:none;
+color:black;
+font-size:14px;
+font-weight:500;
+background:white;
+padding:10px 16px;
+border-radius:10px;
+transition:.2s
+}
+
+.back-link:hover{
+transform:translateY(-2px)
+}
+
+.logo{
+width:42px;
+height:42px;
+border-radius:12px;
+object-fit:cover
+}
+
+.container{
+max-width:500px;
+margin:auto
+}
+
+.form-card{
+background:#111;
+padding:30px;
+border-radius:20px;
+box-shadow:0 10px 30px rgba(0,0,0,.6);
+display:flex;
+flex-direction:column;
+gap:16px
+}
+
+.title{
+font-size:20px;
+font-weight:600;
+margin-bottom:5px
+}
+
+.subtitle{
+font-size:13px;
+color:#888;
+margin-bottom:10px
+}
+
+.input{
+background:#1c1c1e;
+border:none;
+border-radius:12px;
+padding:13px;
+color:#fff;
+font-size:14px;
+outline:none
+}
+
+.input::placeholder{
+color:#777
+}
+
+.file-input{
+background:#1c1c1e;
+border-radius:12px;
+padding:12px;
+color:#aaa;
+font-size:13px;
+cursor:pointer
+}
+
+.file-input::-webkit-file-upload-button{
+background:#fff;
+border:none;
+padding:8px 12px;
+border-radius:8px;
+margin-right:10px;
+cursor:pointer
+}
+
+button{
+margin-top:5px;
+border:none;
+background:white;
+color:black;
+padding:13px;
+border-radius:12px;
+font-weight:600;
+cursor:pointer;
+transition:.2s
+}
+
+button:hover{
+transform:translateY(-2px)
+}
+
+button:active{
+transform:scale(.97)
+}
+
+.messages{
+direction:rtl;
+display:flex;
+flex-direction:column;
+gap:10px;
+margin-bottom:20px;
+list-style:none
+}
+
+.messages li{
+background:#1c1c1e;
+padding:12px;
+border-radius:12px;
+font-size:13px;
+color:#ddd
+}
+
+</style>
+
+</head>
+
+<body>
+
+<div class="header">
+
+<a href="/" class="back-link">بازگشت</a>
+
+<img src="{% static 'musicunkno.png' %}" class="logo">
+
+</div>
+
+
+<div class="container">
+
+{% if messages %}
+<ul class="messages">
+{% for message in messages %}
+<li>{{ message }}</li>
+{% endfor %}
+</ul>
+{% endif %}
+
+
+<form method="post" enctype="multipart/form-data">
+
+<div class="form-card">
+
+{% csrf_token %}
+
+<div class="title">Upload Music</div>
+<div class="subtitle">موزیکت رو ناشناس با بقیه به اشتراک بگذار</div>
+
+<input class="input" type="text" placeholder="Your name?" name="username">
+
+<input class="file-input" type="file" accept="audio/*" name="music">
+
+<button>Upload</button>
+
+</div>
+
+</form>
+
+</div>
+
+</body>
+</html>
