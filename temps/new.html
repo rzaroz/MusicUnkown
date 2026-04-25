@@ -1,156 +1,216 @@
 {% load static %}
 <!DOCTYPE html>
-<html lang="fa">
+<html lang="fa" dir="rtl">
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <link rel="shortcut icon" href="{% static 'musicunkno.png' %}" type="image/x-icon">
-<title>Add Music</title>
+<title>آپلود موزیک - Music Lobby</title>
 
 <style>
-
-*{
-margin:0;
-padding:0;
-box-sizing:border-box;
-font-family:-apple-system,BlinkMacSystemFont,"SF Pro Display",sans-serif
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    font-family: -apple-system, BlinkMacSystemFont, "SF Pro Display", "Segoe UI", Roboto, sans-serif;
 }
 
-body{
-background:#000;
-color:#fff;
-min-height:100vh;
-padding:40px 20px
+body {
+    background: #000;
+    color: #fff;
+    min-height: 100vh;
+    padding: 40px 20px;
+    display: flex;
+    flex-direction: column;
 }
 
-.header{
-width:100%;
-max-width:900px;
-margin:auto;
-display:flex;
-align-items:center;
-justify-content:space-between;
-margin-bottom:60px
+.header {
+    width: 100%;
+    max-width: 900px;
+    margin: 0 auto 60px auto;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    flex-direction: row-reverse;
 }
 
-.back-link{
-text-decoration:none;
-color:black;
-font-size:14px;
-font-weight:500;
-background:white;
-padding:10px 16px;
-border-radius:10px;
-transition:.2s
+.back-link {
+    text-decoration: none;
+    color: black;
+    font-size: 14px;
+    font-weight: 600;
+    background: white;
+    padding: 10px 20px;
+    border-radius: 12px;
+    transition: 0.2s;
 }
 
-.back-link:hover{
-transform:translateY(-2px)
+.back-link:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 4px 12px rgba(255,255,255,0.2);
 }
 
-.logo{
-width:42px;
-height:42px;
-border-radius:12px;
-object-fit:cover
+.logo {
+    width: 42px;
+    height: 42px;
+    border-radius: 12px;
+    object-fit: cover;
 }
 
-.container{
-max-width:500px;
-margin:auto
+.container {
+    width: 100%;
+    max-width: 480px;
+    margin: auto;
 }
 
-.form-card{
-background:#111;
-padding:30px;
-border-radius:20px;
-box-shadow:0 10px 30px rgba(0,0,0,.6);
-display:flex;
-flex-direction:column;
-gap:16px
+.form-card {
+    background: #111;
+    padding: 35px 30px;
+    border-radius: 24px;
+    box-shadow: 0 10px 40px rgba(0, 0, 0, 0.8);
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
 }
 
-.title{
-font-size:20px;
-font-weight:600;
-margin-bottom:5px
+.form-header {
+    text-align: center;
+    margin-bottom: 10px;
 }
 
-.subtitle{
-font-size:13px;
-color:#888;
-margin-bottom:10px
+.title {
+    font-size: 24px;
+    font-weight: 700;
+    margin-bottom: 8px;
+    letter-spacing: -0.5px;
 }
 
-.input{
-background:#1c1c1e;
-border:none;
-border-radius:12px;
-padding:13px;
-color:#fff;
-font-size:14px;
-outline:none
+.subtitle {
+    font-size: 14px;
+    color: #888;
 }
 
-.input::placeholder{
-color:#777
+.input-group {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
 }
 
-.file-input{
-background:#1c1c1e;
-border-radius:12px;
-padding:12px;
-color:#aaa;
-font-size:13px;
-cursor:pointer
+.input-label {
+    font-size: 13px;
+    color: #aaa;
+    margin-right: 5px;
 }
 
-.file-input::-webkit-file-upload-button{
-background:#fff;
-border:none;
-padding:8px 12px;
-border-radius:8px;
-margin-right:10px;
-cursor:pointer
+.input {
+    background: #1c1c1e;
+    border: 2px solid transparent;
+    border-radius: 14px;
+    padding: 15px;
+    color: #fff;
+    font-size: 15px;
+    outline: none;
+    transition: 0.3s;
+}
+.input::placeholder {
+    text-align: center;
+    direction: ltr;
+}
+.input:focus {
+    border-color: #444;
+    background: #222;
 }
 
-button{
-margin-top:5px;
-border:none;
-background:white;
-color:black;
-padding:13px;
-border-radius:12px;
-font-weight:600;
-cursor:pointer;
-transition:.2s
+.input::placeholder {
+    color: #666;
 }
 
-button:hover{
-transform:translateY(-2px)
+.file-upload-wrapper {
+    position: relative;
+    margin-top: 5px;
 }
 
-button:active{
-transform:scale(.97)
+.file-upload-wrapper input[type="file"] {
+    display: none;
 }
 
-.messages{
-direction:rtl;
-display:flex;
-flex-direction:column;
-gap:10px;
-margin-bottom:20px;
-list-style:none
+.custom-file-upload {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    background: #1c1c1e;
+    border: 2px dashed #444;
+    border-radius: 16px;
+    padding: 30px 20px;
+    cursor: pointer;
+    transition: 0.3s;
+    text-align: center;
+    gap: 10px;
 }
 
-.messages li{
-background:#1c1c1e;
-padding:12px;
-border-radius:12px;
-font-size:13px;
-color:#ddd
+.custom-file-upload:hover {
+    background: #222;
+    border-color: #666;
 }
 
+.upload-icon {
+    font-size: 32px;
+    margin-bottom: 5px;
+}
+
+.file-name-display {
+    font-size: 14px;
+    font-weight: 500;
+    color: #fff;
+    word-break: break-word;
+}
+
+.upload-hint {
+    font-size: 12px;
+    color: #666;
+}
+
+.submit-btn {
+    margin-top: 15px;
+    border: none;
+    background: white;
+    color: black;
+    padding: 16px;
+    border-radius: 14px;
+    font-size: 16px;
+    font-weight: 700;
+    cursor: pointer;
+    transition: 0.2s;
+    width: 100%;
+}
+
+.submit-btn:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 6px 15px rgba(255,255,255,0.15);
+}
+
+.submit-btn:active {
+    transform: scale(0.98);
+}
+
+.messages {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    margin-bottom: 25px;
+    list-style: none;
+}
+
+.messages li {
+    background: rgba(255, 255, 255, 0.1);
+    padding: 15px;
+    border-radius: 14px;
+    font-size: 14px;
+    color: #fff;
+    text-align: center;
+    backdrop-filter: blur(10px);
+}
 </style>
 
 </head>
@@ -158,45 +218,67 @@ color:#ddd
 <body>
 
 <div class="header">
-
-<a href="/" class="back-link">بازگشت</a>
-
-<img src="{% static 'musicunkno.png' %}" class="logo">
-
+    <a href="/" class="back-link">بازگشت</a>
+    <img src="{% static 'musicunkno.png' %}" class="logo" alt="Logo">
 </div>
-
 
 <div class="container">
 
-{% if messages %}
-<ul class="messages">
-{% for message in messages %}
-<li>{{ message }}</li>
-{% endfor %}
-</ul>
-{% endif %}
+    {% if messages %}
+    <ul class="messages">
+        {% for message in messages %}
+        <li>{{ message }}</li>
+        {% endfor %}
+    </ul>
+    {% endif %}
 
+    <form method="post" enctype="multipart/form-data">
+        <div class="form-card">
+            {% csrf_token %}
 
-<form method="post" enctype="multipart/form-data">
+            <div class="form-header">
+                <div class="title">آپلود موزیک</div>
+                <div class="subtitle">موزیکت رو ناشناس با بقیه به اشتراک بگذار</div>
+            </div>
 
-<div class="form-card">
+            <div class="input-group">
+                <label class="input-label">نام شما</label>
+                <input class="input" type="text" placeholder="?publisher name" name="username">
+            </div>
 
-{% csrf_token %}
+            <div class="file-upload-wrapper">
+                <label class="input-label">فایل موزیک</label>
+                <label for="musicFileInput" class="custom-file-upload">
+                    <span class="upload-icon">📥</span>
+                    <span class="file-name-display" id="fileName">برای انتخاب موزیک کلیک کنید</span>
+                    <span class="upload-hint">پشتیبانی از MP3, M4A, WAV (iPhone & Android)</span>
+                </label>
+                <input id="musicFileInput" type="file" accept=".mp3, .wav, .m4a, audio/mp4, audio/mpeg, audio/*" name="music" required>
+            </div>
 
-<div class="title">Upload Music</div>
-<div class="subtitle">موزیکت رو ناشناس با بقیه به اشتراک بگذار</div>
+            <button type="submit" class="submit-btn"> Share </button>
 
-<input class="input" type="text" placeholder="Your name?" name="username">
-
-<input class="file-input" type="file" accept="audio/*" name="music">
-
-<button>Upload</button>
+        </div>
+    </form>
 
 </div>
 
-</form>
+<script>
+    document.addEventListener("DOMContentLoaded", () => {
+        const fileInput = document.getElementById('musicFileInput');
+        const fileNameDisplay = document.getElementById('fileName');
 
-</div>
+        fileInput.addEventListener('change', function(e) {
+            if (this.files && this.files.length > 0) {
+                fileNameDisplay.textContent = this.files[0].name;
+                fileNameDisplay.style.color = "#4caf50";
+            } else {
+                fileNameDisplay.textContent = "برای انتخاب موزیک کلیک کنید";
+                fileNameDisplay.style.color = "#fff";
+            }
+        });
+    });
+</script>
 
 </body>
 </html>

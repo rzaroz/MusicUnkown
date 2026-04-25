@@ -1,6 +1,6 @@
 {% load static %}
 <!DOCTYPE html>
-<html lang="fa">
+<html lang="fa" dir="rtl">
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -8,297 +8,539 @@
 <title>Music Lobby</title>
 
 <style>
-
-*{
-margin:0;
-padding:0;
-box-sizing:border-box;
-font-family:-apple-system,BlinkMacSystemFont,"SF Pro Display",sans-serif
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    font-family: -apple-system, BlinkMacSystemFont, "SF Pro Display", sans-serif;
 }
 
-body{
-background:#000;
-color:#fff;
-min-height:100vh;
-padding:40px 20px
+body {
+    background: #000;
+    color: #fff;
+    min-height: 100vh;
+    padding: 40px 20px;
+    direction: rtl;
 }
 
-.header{
-width:100%;
-max-width:900px;
-margin:auto;
-display:flex;
-align-items:center;
-justify-content:space-between;
-margin-bottom:40px
+.header {
+    width: 100%;
+    max-width: 1000px;
+    margin: 0 auto 40px auto;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    flex-direction: row-reverse;
 }
 
-.add-link{
-text-decoration:none;
-color:black;
-font-size:14px;
-font-weight:500;
-background:white;
-padding:10px 16px;
-border-radius:10px;
-transition:.2s
+.add-link {
+    text-decoration: none;
+    color: black;
+    font-size: 14px;
+    font-weight: 500;
+    background: white;
+    padding: 10px 16px;
+    border-radius: 10px;
+    transition: .2s;
 }
 
-.add-link:hover{
-transform:translateY(-2px)
+.add-link:hover {
+    transform: translateY(-2px);
 }
 
-.logo{
-width:42px;
-height:42px;
-border-radius:12px;
-object-fit:cover
+.logo {
+    width: 42px;
+    height: 42px;
+    border-radius: 12px;
+    object-fit: cover;
 }
 
-.container{
-max-width:600px;
-margin:auto
+.main-wrapper {
+    max-width: 1000px;
+    margin: auto;
+    display: flex;
+    gap: 30px;
+    align-items: flex-start;
 }
 
-.music-card{
-background:#111;
-padding:22px;
-border-radius:18px;
-margin-bottom:20px;
-box-shadow:0 10px 30px rgba(0,0,0,.6);
-transition:.25s
+.playlist-section {
+    width: 35%;
+    background: #111;
+    border-radius: 18px;
+    padding: 20px;
+    box-shadow: 0 10px 30px rgba(0,0,0,.6);
+    display: flex;
+    flex-direction: column;
 }
 
-.music-card:hover{
-transform:translateY(-3px)
+.playlist-title {
+    font-size: 16px;
+    font-weight: bold;
+    margin-bottom: 20px;
+    color: #ddd;
+    border-bottom: 1px solid #333;
+    padding-bottom: 10px;
 }
 
-.uploader{
-font-size:13px;
-color:#888;
-margin-bottom:6px
+.playlist-items {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    max-height: 400px;
+    overflow-y: auto;
 }
 
-.song-name{
-font-size:20px;
-font-weight:600;
-margin-bottom:14px;
-white-space:nowrap;
-overflow:hidden;
-text-overflow:ellipsis;
-display:block;
+.playlist-items::-webkit-scrollbar { width: 5px; }
+.playlist-items::-webkit-scrollbar-thumb { background: #333; border-radius: 5px; }
+
+.playlist-item {
+    padding: 12px;
+    background: #1c1c1e;
+    border-radius: 12px;
+    cursor: pointer;
+    transition: 0.2s;
+    border: 1px solid transparent;
 }
 
-.share-row{
-display:flex;
-align-items:center;
-justify-content:space-between;
-margin-bottom:12px
+.playlist-item:hover {
+    background: #2a2a2d;
 }
 
-.sharelink{
-padding:8px 14px;
-background:rgba(255,255,255,.35);
-display:flex;
-align-items:center;
-justify-content:center;
-color:black;
-text-decoration:none;
-border-radius:14px;
-font-size:11px;
-transition:.2s
+.playlist-item.active {
+    border-color: #555;
+    background: #222;
 }
 
-.sharelink:hover{
-background:white
+.playlist-item .song-name {
+    font-size: 14px;
+    font-weight: 600;
+    margin-bottom: 4px;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
 }
 
-.audio-player{
-width:100%;
-height:40px;
-background:#1c1c1e;
-border-radius:12px;
-outline:none
+.playlist-item .uploader {
+    font-size: 11px;
+    color: #888;
 }
 
-audio::-webkit-media-controls-panel{
-background:#1c1c1e
+.player-section {
+    width: 65%;
+    background: #111;
+    border-radius: 18px;
+    padding: 40px;
+    box-shadow: 0 10px 30px rgba(0,0,0,.6);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
 }
 
-.pagination{
-display:flex;
-align-items:center;
-justify-content:center;
-gap:10px;
-margin-top:35px
+.cover-art {
+    width: 150px;
+    height: 150px;
+    background: #1c1c1e;
+    border-radius: 20px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 60px;
+    margin-bottom: 25px;
+    box-shadow: 0 10px 20px rgba(0,0,0,.4);
 }
 
-.page-btn{
-padding:10px 15px;
-background:#1c1c1e;
-color:#fff;
-text-decoration:none;
-border-radius:10px;
-font-size:13px;
-transition:.2s
+.main-song-name {
+    font-size: 24px;
+    font-weight: 700;
+    margin-bottom: 8px;
 }
 
-.page-btn:hover{
-background:#2a2a2d
+.main-uploader {
+    font-size: 14px;
+    color: #888;
+    margin-bottom: 25px;
 }
 
-.page-active{
-background:#fff;
-color:#000
+.sharelink {
+    padding: 8px 16px;
+    background: rgba(255,255,255,.1);
+    color: #fff;
+    text-decoration: none;
+    border-radius: 14px;
+    font-size: 12px;
+    transition: .2s;
+    margin-top: 20px;
 }
 
-.page-disabled{
-opacity:.3;
-pointer-events:none
+.sharelink:hover {
+    background: #fff;
+    color: #000;
 }
 
-.donate-box{
-background:#111;
-padding:25px;
-border-radius:18px;
-margin:60px auto 40px auto;
-max-width:600px;
-text-align:center;
-box-shadow:0 10px 30px rgba(0,0,0,.6)
+.custom-player {
+    width: 100%;
+    max-width: 400px;
 }
 
-.donate-title{
-font-size:18px;
-font-weight:600;
-margin-bottom:10px
+.controls {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 25px;
+    margin-bottom: 20px;
 }
 
-.donate-text{
-font-size:13px;
-color:#bbb;
-margin-bottom:18px
+.control-btn {
+    background: none;
+    border: none;
+    color: #fff;
+    cursor: pointer;
+    font-size: 24px;
+    transition: 0.2s;
+    display: flex;
+    align-items: center;
+    justify-content: center;
 }
 
-.wallet-box{
-background:#1c1c1e;
-padding:14px;
-border-radius:10px;
-font-size:12px;
-word-break:break-all;
-margin-bottom:14px
+.control-btn:hover { color: #aaa; }
+
+.play-pause-btn {
+    background: #fff;
+    color: #000;
+    width: 55px;
+    height: 55px;
+    border-radius: 50%;
+    font-size: 22px;
 }
 
-.wallet-address{
-color:#0ff
+.play-pause-btn:hover {
+    background: #ddd;
+    color: #000;
+    transform: scale(1.05);
 }
 
-.copy-btn{
-background:#fff;
-color:#000;
-padding:10px 20px;
-border-radius:12px;
-border:none;
-font-size:13px;
-cursor:pointer;
-transition:.2s
+.progress-container {
+    display: flex;
+    align-items: center;
+    gap: 15px;
+    font-size: 12px;
+    color: #888;
+    width: 100%;
+    direction: ltr;
 }
 
-.copy-btn:hover{
-transform:translateY(-2px)
+.progress-bar {
+    flex: 1;
+    height: 6px;
+    background: #333;
+    border-radius: 3px;
+    cursor: pointer;
+    position: relative;
+    overflow: hidden;
 }
 
-.empty{
-text-align:center;
-color:#777;
-margin-top:40px
+.progress-fill {
+    height: 100%;
+    background: #fff;
+    width: 0%;
+    transition: width 0.1s linear;
 }
 
+.pagination {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    margin-top: 20px;
+}
+
+.page-btn {
+    padding: 8px 12px;
+    background: #1c1c1e;
+    color: #fff;
+    text-decoration: none;
+    border-radius: 8px;
+    font-size: 12px;
+    transition: .2s;
+}
+
+.page-btn:hover { background: #2a2a2d; }
+.page-active { background: #fff; color: #000; }
+.page-disabled { opacity: .3; pointer-events: none; }
+
+.donate-box {
+    background: #111;
+    padding: 25px;
+    border-radius: 18px;
+    margin: 60px auto 40px auto;
+    max-width: 600px;
+    text-align: center;
+    box-shadow: 0 10px 30px rgba(0,0,0,.6);
+}
+
+.donate-title { font-size: 18px; font-weight: 600; margin-bottom: 10px; }
+.donate-text { font-size: 13px; color: #bbb; margin-bottom: 18px; }
+
+.wallet-box {
+    background: #1c1c1e;
+    padding: 14px;
+    border-radius: 10px;
+    font-size: 12px;
+    word-break: break-all;
+    margin-bottom: 14px;
+}
+
+.wallet-address { color: #0ff; direction: ltr; display: inline-block; }
+
+.copy-btn {
+    background: #fff;
+    color: #000;
+    padding: 10px 20px;
+    border-radius: 12px;
+    border: none;
+    font-size: 13px;
+    cursor: pointer;
+    transition: .2s;
+}
+
+.copy-btn:hover { transform: translateY(-2px); }
+.empty { text-align: center; color: #777; margin-top: 40px; width: 100%; }
+
+@media (max-width: 768px) {
+    .main-wrapper {
+        flex-direction: column-reverse;
+    }
+    .playlist-section, .player-section {
+        width: 100%;
+    }
+}
 </style>
 </head>
 
 <body>
 
 <div class="header">
-
-<a href="{% url 'add_new' %}" class="add-link">+ افزودن آهنگ</a>
-
-<img src="{% static 'musicunkno.png' %}" class="logo">
-
+    <a href="{% url 'add_new' %}" class="add-link">+ افزودن آهنگ</a>
+    <img src="{% static 'musicunkno.png' %}" class="logo" alt="logo">
 </div>
 
+<div class="main-wrapper">
 
-<div class="container" id="musicList">
+    <div class="playlist-section">
+        <div class="playlist-title">لیست پخش</div>
 
-{% if musics %}
-{% for m in musics %}
+        {% if musics %}
+        <div class="playlist-items" id="playlistItems">
+            {% for m in musics %}
+            <div class="playlist-item"
+                 data-index="{{ forloop.counter0 }}"
+                 data-url="{{ m.music.url }}"
+                 data-name="{{ m.music_name }}"
+                 data-uploader="{{ m.username }}"
+                 data-pk="{{ m.pk }}">
+                <div class="song-name">{{ m.music_name }}</div>
+                <div class="uploader">{{ m.username }}</div>
+            </div>
+            {% endfor %}
+        </div>
+        {% else %}
+        <p class="empty">هنوز آهنگی ثبت نشده :(</p>
+        {% endif %}
 
-<div class="music-card">
+        <div class="pagination">
+            {% if musics.has_previous %}
+            <a class="page-btn" id="prevPageBtn" href="?page={{ musics.previous_page_number }}">قبلی</a>
+            {% else %}
+            <span class="page-btn page-disabled">قبلی</span>
+            {% endif %}
 
-<div class="uploader">{{ m.username }}</div>
+            <span class="page-btn page-active">{{ musics.number }} / {{ musics.paginator.num_pages }}</span>
 
-<div class="song-name">{{ m.music_name }}</div>
+            {% if musics.has_next %}
+            <a class="page-btn" id="nextPageBtn" href="?page={{ musics.next_page_number }}">بعدی</a>
+            {% else %}
+            <span class="page-btn page-disabled">بعدی</span>
+            {% endif %}
+        </div>
+    </div>
 
-<div class="share-row">
-<a href="/{{ m.pk }}/" class="sharelink">share 👾</a>
+    <div class="player-section">
+        <div class="cover-art" id="coverArt">🎵</div>
+        <div class="main-song-name" id="mainSongName">آهنگی انتخاب نشده</div>
+        <div class="main-uploader" id="mainUploader">-</div>
+
+        <div class="custom-player">
+            <audio id="mainAudio" preload="metadata"></audio>
+
+            <div class="controls">
+                <button class="control-btn" id="nextBtn" title="بعدی">⏭</button>
+                <button class="control-btn play-pause-btn" id="playBtn" title="پخش / توقف">▶</button>
+                <button class="control-btn" id="prevBtn" title="قبلی">⏮</button>
+            </div>
+
+            <div class="progress-container">
+                <span id="currentTime">0:00</span>
+                <div class="progress-bar" id="progressBar">
+                    <div class="progress-fill" id="progressFill"></div>
+                </div>
+                <span id="totalTime">0:00</span>
+            </div>
+        </div>
+
+        <a href="#" id="shareLink" class="sharelink" style="display:none;">share 👾</a>
+    </div>
+
 </div>
-
-<audio class="audio-player" controls src="{{ m.music.url }}"></audio>
-
-</div>
-
-{% endfor %}
-{% else %}
-<p class="empty">no song yet :(</p>
-{% endif %}
-
-
-<div class="pagination">
-
-{% if musics.has_previous %}
-<a class="page-btn" href="?page={{ musics.previous_page_number }}">قبلی</a>
-{% else %}
-<span class="page-btn page-disabled">قبلی</span>
-{% endif %}
-
-<span class="page-btn page-active">{{ musics.number }} / {{ musics.paginator.num_pages }}</span>
-
-{% if musics.has_next %}
-<a class="page-btn" href="?page={{ musics.next_page_number }}">بعدی</a>
-{% else %}
-<span class="page-btn page-disabled">بعدی</span>
-{% endif %}
-
-</div>
-
-</div>
-
 
 <div class="donate-box">
-
-<div class="donate-title">اگه از موزیک‌لا‌بی خوشت اومد ❤️</div>
-
-<div class="donate-text">می‌تونی یه دونیت کوچیک کنی تا با قدرت ادامه بدم</div>
-
-<div class="wallet-box">
-<span>TRON (TRX):</span>
-<span class="wallet-address">TJnxC2xXQupVz1KPvVNppdjwxJCYQcnp1F</span>
+    <div class="donate-title">اگه از موزیک‌لا‌بی خوشت اومد ❤️</div>
+    <div class="donate-text">می‌تونی یه دونیت کوچیک کنی تا با قدرت ادامه بدم</div>
+    <div class="wallet-box">
+        <span>TRON (TRX):</span>
+        <span class="wallet-address">TJnxC2xXQupVz1KPvVNppdjwxJCYQcnp1F</span>
+    </div>
+    <button class="copy-btn" onclick="copyWallet()">کپی آدرس</button>
 </div>
-
-<button class="copy-btn" onclick="copyWallet()">کپی آدرس</button>
-
-</div>
-
 
 <script>
 
 function copyWallet(){
-const w=document.querySelector('.wallet-address').innerText
-navigator.clipboard.writeText(w)
-const btn=document.querySelector('.copy-btn')
-btn.innerText='کپی شد ✓'
-setTimeout(()=>btn.innerText='کپی آدرس',1500)
+    const w = document.querySelector('.wallet-address').innerText;
+    navigator.clipboard.writeText(w);
+    const btn = document.querySelector('.copy-btn');
+    btn.innerText = 'کپی شد ✓';
+    setTimeout(() => btn.innerText = 'کپی آدرس', 1500);
 }
 
+document.addEventListener("DOMContentLoaded", () => {
+    const playlistItems = document.querySelectorAll('.playlist-item');
+    const audio = document.getElementById('mainAudio');
+    const playBtn = document.getElementById('playBtn');
+    const prevBtn = document.getElementById('prevBtn');
+    const nextBtn = document.getElementById('nextBtn');
+
+    const titleEl = document.getElementById('mainSongName');
+    const uploaderEl = document.getElementById('mainUploader');
+    const shareLinkEl = document.getElementById('shareLink');
+    const progressFill = document.getElementById('progressFill');
+    const progressBar = document.getElementById('progressBar');
+    const currentTimeEl = document.getElementById('currentTime');
+    const totalTimeEl = document.getElementById('totalTime');
+
+    let currentIndex = -1;
+
+    function formatTime(seconds) {
+        if (isNaN(seconds)) return "0:00";
+        let min = Math.floor(seconds / 60);
+        let sec = Math.floor(seconds % 60);
+        return `${min}:${sec < 10 ? '0' : ''}${sec}`;
+    }
+
+    function loadSong(index) {
+        if (playlistItems.length === 0 || index < 0 || index >= playlistItems.length) return;
+
+        playlistItems.forEach(item => item.classList.remove('active'));
+
+        const item = playlistItems[index];
+        item.classList.add('active');
+
+        const src = item.getAttribute('data-url');
+        const name = item.getAttribute('data-name');
+        const uploader = item.getAttribute('data-uploader');
+        const pk = item.getAttribute('data-pk');
+
+        titleEl.innerText = name;
+        uploaderEl.innerText = uploader;
+        shareLinkEl.href = `/${pk}/`;
+        shareLinkEl.style.display = 'inline-block';
+
+        audio.src = src;
+        currentIndex = index;
+    }
+
+    function playAudio() {
+        audio.play();
+        playBtn.innerText = '⏸';
+    }
+
+    function pauseAudio() {
+        audio.pause();
+        playBtn.innerText = '▶';
+    }
+
+    function togglePlay() {
+        if (currentIndex === -1 && playlistItems.length > 0) {
+            loadSong(0);
+        }
+        if (audio.paused) {
+            playAudio();
+        } else {
+            pauseAudio();
+        }
+    }
+
+    function playNext() {
+        if (currentIndex + 1 < playlistItems.length) {
+            loadSong(currentIndex + 1);
+            playAudio();
+        } else {
+            const nextLink = document.getElementById('nextPageBtn');
+            if (nextLink) window.location.href = nextLink.href;
+        }
+    }
+
+    function playPrev() {
+        if (audio.currentTime > 3) {
+            audio.currentTime = 0;
+            return;
+        }
+
+        if (currentIndex - 1 >= 0) {
+            loadSong(currentIndex - 1);
+            playAudio();
+        } else {
+            const prevLink = document.getElementById('prevPageBtn');
+            if (prevLink) window.location.href = prevLink.href;
+        }
+    }
+
+    playlistItems.forEach((item, index) => {
+        item.addEventListener('click', () => {
+            loadSong(index);
+            playAudio();
+        });
+    });
+
+    playBtn.addEventListener('click', togglePlay);
+    nextBtn.addEventListener('click', playNext);
+    prevBtn.addEventListener('click', playPrev);
+
+    audio.addEventListener('loadedmetadata', () => {
+        totalTimeEl.innerText = formatTime(audio.duration);
+    });
+
+    audio.addEventListener('timeupdate', () => {
+        currentTimeEl.innerText = formatTime(audio.currentTime);
+        let progressPercent = (audio.currentTime / audio.duration) * 100;
+        progressFill.style.width = `${progressPercent}%`;
+    });
+
+    audio.addEventListener('ended', playNext);
+
+    progressBar.addEventListener('click', (e) => {
+        if (currentIndex === -1) return;
+        let width = progressBar.clientWidth;
+        let clickX = e.offsetX;
+        let duration = audio.duration;
+        audio.currentTime = (clickX / width) * duration;
+    });
+
+    if (playlistItems.length > 0) {
+        loadSong(0);
+    }
+});
 </script>
 
 </body>
