@@ -4,6 +4,7 @@ from django.http import Http404, HttpResponseRedirect
 from django.core.paginator import Paginator
 from django.urls import reverse
 from .models import Musics
+import os
 
 def home(request):
     musics = Musics.objects.all().order_by("-pk")
@@ -19,18 +20,30 @@ def add_new(request):
     context = {}
 
     if request.method == "POST":
-        username = request.POST.get("username", None)
-        music = request.FILES.get("music", None)
+        username = request.POST.get("username")
+        music = request.FILES.get("music")
 
         if not username or not music:
             messages.error(request, "لطفا مقدار های خواسته شدرو به درستی وارد کنید.")
             return render(request, "new.html", context)
 
+        username = username.strip()
+
+        if len(username) < 3 or len(username) > 50:
+            messages.error(request, "نام کاربری معتبر نیست.")
+            return render(request, "new.html", context)
+
+        max_size = 20 * 1024 * 1024
+        if music.size > max_size:
+            messages.error(request, "حجم فایل نباید بیشتر از 20 مگابایت باشد.")
+            return render(request, "new.html", context)
+
         music_name = music.name
+        ext = os.path.splitext(music_name)[1].lower()
 
         allowed_extensions = [".mp3", ".wav", ".ogg", ".m4a", ".aac"]
 
-        if not any(music_name.lower().endswith(ext) for ext in allowed_extensions):
+        if ext not in allowed_extensions:
             messages.error(request, "لطفا فقط فایل صوتی معتبر آپلود کنید.")
             return render(request, "new.html", context)
 
@@ -47,17 +60,15 @@ def add_new(request):
             messages.error(request, "فرمت فایل توسط سرور پشتیبانی نمی‌شود.")
             return render(request, "new.html", context)
 
-        music_name = music_name.split('.')[0]
+        music_name = os.path.splitext(music_name)[0]
 
         new_music = Musics.objects.create(
             username=username,
             music_name=music_name,
             music=music
         )
-        new_music.save()
 
         return HttpResponseRedirect(reverse("detail", kwargs={"pk": new_music.pk}))
-
 
     return render(request, "new.html", context)
 
