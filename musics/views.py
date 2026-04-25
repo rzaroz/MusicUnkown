@@ -64,7 +64,10 @@ def add_new(request):
 def detail_view(request, pk):
     context = {}
 
-    music = Musics.objects.filter(pk=pk).first()
+    try:
+        music = Musics.objects.filter(pk=pk).first()
+    except:
+        raise Http404("Music not found")
 
     if not music:
         raise Http404("Music not found")

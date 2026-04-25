@@ -312,6 +312,13 @@ body {
     transition: .2s;
 }
 
+.dow-share {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 10px;
+}
+
 .copy-btn:hover { transform: translateY(-2px); }
 .empty { text-align: center; color: #777; margin-top: 40px; width: 100%; }
 
@@ -396,7 +403,10 @@ body {
             </div>
         </div>
 
-        <a href="#" id="shareLink" class="sharelink" style="display:none;">share 👾</a>
+        <div class="dow-share">
+            <a href="#" id="shareLink" class="sharelink" style="display:none;">share 👾</a>
+            <a href="#" id="downloadLink" download="" class="sharelink" style="">download 👾</a>
+        </div>
     </div>
 
 </div>
@@ -431,6 +441,7 @@ document.addEventListener("DOMContentLoaded", () => {
     const titleEl = document.getElementById('mainSongName');
     const uploaderEl = document.getElementById('mainUploader');
     const shareLinkEl = document.getElementById('shareLink');
+    const downloadLink = document.getElementById('downloadLink');
     const progressFill = document.getElementById('progressFill');
     const progressBar = document.getElementById('progressBar');
     const currentTimeEl = document.getElementById('currentTime');
@@ -461,6 +472,8 @@ document.addEventListener("DOMContentLoaded", () => {
         titleEl.innerText = name;
         uploaderEl.innerText = uploader;
         shareLinkEl.href = `/${pk}/`;
+        downloadLink.href = src
+        downloadLink.download = name || 'file'
         shareLinkEl.style.display = 'inline-block';
 
         audio.src = src;

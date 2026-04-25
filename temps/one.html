@@ -175,11 +175,20 @@ body {
     cursor: pointer;
     transition: .2s;
     margin-top: 30px;
+    text-decoration: none;
 }
 
 .share-btn:hover {
     background: #fff;
     color: #000;
+}
+
+.dow-share {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 10px;
+
 }
 
 </style>
@@ -213,7 +222,11 @@ body {
         </div>
     </div>
 
-    <button class="share-btn" onclick="copyLink()">share 👾</button>
+
+    <div class="dow-share">
+        <button class="share-btn" onclick="copyLink()">share 👾</button>
+        <a href="{{ music.music.url }}" id="downloadLink" download="{{ music.music.name }}" class="share-btn" style="">download 👾</a>
+    </div>
 </div>
 
 <script>
