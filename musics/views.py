@@ -29,10 +29,6 @@ def add_new(request):
 
         username = username.strip()
 
-        if len(username) < 3 or len(username) > 50:
-            messages.error(request, "نام کاربری معتبر نیست.")
-            return render(request, "new.html", context)
-
         max_size = 20 * 1024 * 1024
         if music.size > max_size:
             messages.error(request, "حجم فایل نباید بیشتر از 20 مگابایت باشد.")
@@ -47,26 +43,17 @@ def add_new(request):
             messages.error(request, "لطفا فقط فایل صوتی معتبر آپلود کنید.")
             return render(request, "new.html", context)
 
-        allowed_content_types = [
-            "audio/mpeg",
-            "audio/wav",
-            "audio/x-wav",
-            "audio/ogg",
-            "audio/mp4",
-            "audio/aac",
-        ]
-
-        if music.content_type not in allowed_content_types:
-            messages.error(request, "فرمت فایل توسط سرور پشتیبانی نمی‌شود.")
-            return render(request, "new.html", context)
-
         music_name = os.path.splitext(music_name)[0]
 
-        new_music = Musics.objects.create(
-            username=username,
-            music_name=music_name,
-            music=music
-        )
+        try:
+            new_music = Musics.objects.create(
+                username=username,
+                music_name=music_name,
+                music=music
+            )
+        except Exception:
+            messages.error(request, "خطا در آپلود فایل رخ داد.")
+            return render(request, "new.html", context)
 
         return HttpResponseRedirect(reverse("detail", kwargs={"pk": new_music.pk}))
 
