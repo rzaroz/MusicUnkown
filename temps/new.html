@@ -211,6 +211,42 @@ body {
     text-align: center;
     backdrop-filter: blur(10px);
 }
+
+.loading-overlay {
+    display: none;
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0, 0, 0, 0.85);
+    backdrop-filter: blur(8px);
+    z-index: 9999;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+}
+
+.spinner {
+    width: 60px;
+    height: 60px;
+    border: 5px solid #333;
+    border-top: 5px solid #fff;
+    border-radius: 50%;
+    animation: spin 1s linear infinite;
+    margin-bottom: 20px;
+}
+
+.loading-text {
+    font-size: 18px;
+    font-weight: 600;
+    color: #fff;
+}
+
+@keyframes spin {
+    0% { transform: rotate(0deg); }
+    100% { transform: rotate(360deg); }
+}
 </style>
 
 </head>
@@ -232,7 +268,7 @@ body {
     </ul>
     {% endif %}
 
-    <form method="post" enctype="multipart/form-data">
+    <form id="uploadForm" method="post" enctype="multipart/form-data">
         <div class="form-card">
             {% csrf_token %}
 
@@ -253,7 +289,7 @@ body {
                     <span class="file-name-display" id="fileName">برای انتخاب موزیک کلیک کنید</span>
                     <span class="upload-hint">پشتیبانی از MP3, M4A, WAV (iPhone & Android)</span>
                 </label>
-                <input id="musicFileInput" type="file" accept name="music" required>
+                <input id="musicFileInput" type="file" name="music" accept required>
             </div>
 
             <button type="submit" class="submit-btn"> Share </button>
@@ -263,10 +299,19 @@ body {
 
 </div>
 
+<!-- المان لودینگ -->
+<div id="loadingOverlay" class="loading-overlay">
+    <div class="spinner"></div>
+    <div class="loading-text">در حال آپلود، لطفاً منتظر بمانید...</div>
+</div>
+
 <script>
     document.addEventListener("DOMContentLoaded", () => {
         const fileInput = document.getElementById('musicFileInput');
         const fileNameDisplay = document.getElementById('fileName');
+        const uploadForm = document.getElementById('uploadForm');
+        const loadingOverlay = document.getElementById('loadingOverlay');
+        const validExtensions = ['.mp3', '.wav', '.m4a', '.aac', '.ogg', '.flac'];
 
         fileInput.addEventListener('change', function(e) {
             if (this.files && this.files.length > 0) {
@@ -275,6 +320,27 @@ body {
             } else {
                 fileNameDisplay.textContent = "برای انتخاب موزیک کلیک کنید";
                 fileNameDisplay.style.color = "#fff";
+            }
+        });
+        uploadForm.addEventListener('submit', function(e) {
+            const file = fileInput.files[0];
+
+            if (file) {
+                if (file.size === 0) {
+                    e.preventDefault();
+                    alert("فایل انتخاب شده خالی است (حجم 0 بایت). لطفاً یک فایل معتبر انتخاب کنید.");
+                    return;
+                }
+                const fileName = file.name.toLowerCase();
+                const isAudioFormat = validExtensions.some(ext => fileName.endsWith(ext)) || file.type.startsWith('audio/');
+
+                if (!isAudioFormat) {
+                    e.preventDefault();
+                    alert("فرمت فایل نامعتبر است! لطفاً فقط فایل‌های صوتی (مانند MP3, WAV, M4A) را آپلود کنید.");
+                    return;
+                }
+
+                loadingOverlay.style.display = "flex";
             }
         });
     });
